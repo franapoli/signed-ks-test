@@ -31,6 +31,6 @@ The "edge" variable contains the limiting index for the "leading edge" subset.
 [1] 10
 ```
 
-## Notes
+# Notes
 
 The source code contains a quick and dirty patch to cope with the low-level function "C_psmirnov2x", which has changed name across R versions (it is now "C_pSmirnov2x"). Code is replicated to account for the two version, should be cleaned up.
