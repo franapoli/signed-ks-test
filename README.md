@@ -21,7 +21,6 @@ The additional variable "ES" contains the signed stiatistic.
 [1] 1
 > ks.test.2(11:100, 1:10)$ES
 [1] -1
-> 
 ```
 
 ## Leading edge
