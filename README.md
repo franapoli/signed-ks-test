@@ -16,6 +16,7 @@ D
 ## With ks.test.2
 The additional variable "ES" contains the signed stiatistic.
 ```
+> source("sined-ks-test.R")
 > ks.test.2(1:10, 11:100)$ES
 [1] 1
 > ks.test.2(11:100, 1:10)$ES
