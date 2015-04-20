@@ -1,6 +1,6 @@
 # signed-ks-test
 
-Modification to R ks.test to obtain signed KS statistic, following the Gene Set Enrichment Analysis method (special case of p=0).
+Modification to R ks.test to obtain signed KS statistic, following the Gene Set Enrichment Analysis method (special case of p=0). See http://www.broadinstitute.org/gsea/index.jsp.
 
 # Example
 ## With original ks.test:
