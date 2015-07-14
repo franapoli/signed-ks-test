@@ -40,7 +40,7 @@ The "edge" variable contains the limiting index for the "leading edge" subset.
 [1] 10
 ```
 
-## Approximation
+## p-value Approximation
 
 Normally, ks.test will warn you if it uses approximated p-values:
 ```
