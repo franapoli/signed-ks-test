@@ -1,6 +1,15 @@
 # signed-ks-test
 
-Modification to R ks.test to obtain signed KS statistic, following the Gene Set Enrichment Analysis method (special case of p=0). See http://www.broadinstitute.org/gsea/index.jsp.
+Modification to R ks.test to obtain signed KS statistic, following the
+Gene Set Enrichment Analysis method (special case of p=0). See
+http://www.broadinstitute.org/gsea/index.jsp.
+
+This function also supports an optional threshold for maximum combined
+size of the two samples case for exact computation (in the original
+one samples whose sizes product is > 10,000 are approximated). In case
+approximation is used, a warning is thrown. In the original function,
+for some reason, a warning is always thrown when p-values are not
+computed exactly, but in this case.
 
 # Example
 ## With original ks.test:
@@ -31,6 +40,56 @@ The "edge" variable contains the limiting index for the "leading edge" subset.
 [1] 10
 ```
 
+## Approximation
+
+In the following, since the size of the two samples multiplied is
+larger than 10,000, ks.test is using approximation. But it won't tell
+you.
+
+```
+> ks.test(c(100, 1000), (1:10000)[-c(100, 1000)])
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  c(100, 1000) and (1:10000)[-c(100, 1000)]
+D = 0.9002, p-value = 0.07827
+alternative hypothesis: two-sided
+``` 
+
+On the other hand, ks.test.2 does admit his limit:
+```
+> ks.test.2(c(100, 1000), (1:10000)[-c(100, 1000)])
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  c(100, 1000) and (1:10000)[-c(100, 1000)]
+D = 0.9002, p-value = 0.07827
+alternative hypothesis: two-sided
+
+Warning message:
+In ks.test.2(c(100, 1000), (1:10000)[-c(100, 1000)]) :
+  P-value not computed exactly because of combined sample size
+```
+
+Plus, it can overcome the limit:
+
+```
+> ks.test.2(c(100, 1000), (1:10000)[-c(100, 1000)], maxCombSize=10^7)
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  c(100, 1000) and (1:10000)[-c(100, 1000)]
+D = 0.9002, p-value = 0.01998
+alternative hypothesis: two-sided
+```
+
+Note that at a significance threshold of 0.05, you would discard the
+null hypothesis when using the exact p-value, but not whe using the
+approximated p-value.
+
 # Notes
 
-The source code contains a quick and dirty patch to cope with the low-level function "C_psmirnov2x", which has changed name across R versions (it is now "C_pSmirnov2x"). Code is replicated to account for the two version, should be cleaned up.
+The source code contains a quick patch to cope with the low-level
+function "C_psmirnov2x", which has changed name across R versions (it
+is now "C_pSmirnov2x") and "C_pkstwo" (which is now "C_pKS2"). The
+code tries one (trycatch) and falls back on the other.
