@@ -8,11 +8,10 @@ http://www.broadinstitute.org/gsea/index.jsp.
 * Give the possibility to set the maximum combined
 size of the two samples for exact computation of the p-values in the two-samples test. In the original
 ks.test, p-values for samples whose sizes product is > 10,000 are approximated. In case
-approximation is used, ks.test.2 throws a warning. In ks.test,
-for some reason, a warning is always thrown when p-values are not
-computed exactly, **but** in the case of too large samples.
+approximation is used, ks.test.2 throws a warning. In ks.test a warning is always thrown when p-values are not
+computed exactly, **but** when the cause is samples size.
 
-# Example
+# Examples
 ## With original ks.test:
 ```
 > ks.test(1:10, 11:100)$statistic
@@ -43,8 +42,22 @@ The "edge" variable contains the limiting index for the "leading edge" subset.
 
 ## Approximation
 
-In the following, since the size of the two samples multiplied is
-larger than 10,000, ks.test is using approximation. **But it won't tell
+Normally, ks.test will warn you if it uses approximated p-values:
+```
+> ks.test(1:10, 5:15)
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  1:10 and 5:15
+D = 0.4545, p-value = 0.2293
+alternative hypothesis: two-sided
+
+Warning message:
+In ks.test(1:10, 5:15) :
+  unable to compute exact p-values in the presence of ties
+```
+In the following, however, since the size of the two samples multiplied is
+larger than 10,000, ks.test is also using approximation (this is documented). **But it won't tell
 you**.
 
 ```
@@ -56,8 +69,7 @@ data:  c(100, 1000) and (1:10000)[-c(100, 1000)]
 D = 0.9002, p-value = 0.07827
 alternative hypothesis: two-sided
 ``` 
-
-On the other hand, ks.test.2 does admit his limit:
+On the other hand, ks.test.2 does warn in the same case:
 ```
 > ks.test.2(c(100, 1000), (1:10000)[-c(100, 1000)])
 
@@ -71,9 +83,7 @@ Warning message:
 In ks.test.2(c(100, 1000), (1:10000)[-c(100, 1000)]) :
   P-value not computed exactly because of combined sample size
 ```
-
-Plus, it can overcome the limit:
-
+Plus, it can overcome the approximation:
 ```
 > ks.test.2(c(100, 1000), (1:10000)[-c(100, 1000)], maxCombSize=10^7)
 
@@ -83,9 +93,8 @@ data:  c(100, 1000) and (1:10000)[-c(100, 1000)]
 D = 0.9002, p-value = 0.01998
 alternative hypothesis: two-sided
 ```
-
-Note that at a significance threshold of 0.05, you would reject the
-null hypothesis when using the exact p-value, but not whe using the
+Note that in this example, at a significance threshold of 0.05, you would reject the
+null hypothesis when using the exact p-value, but not when using the
 approximated p-value.
 
 # Notes
