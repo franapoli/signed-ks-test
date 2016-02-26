@@ -2,14 +2,17 @@
 
 Modification to R ks.test to:
 
-* Obtain signed KS statistic, following the Gene Set Enrichment Analysis method (special case of p=0). See
+* Obtain signed KS statistic, following the Gene Set Enrichment
+Analysis method (special case of p=0). See
 http://www.broadinstitute.org/gsea/index.jsp.
 
-* Give the possibility to set the maximum combined
-size of the two samples for exact computation of the p-values in the two-samples test. In the original
-ks.test, p-values for samples whose sizes product is > 10,000 are approximated. In case
-approximation is used, ks.test.2 throws a warning. In ks.test a warning is always thrown when p-values are not
-computed exactly, **but** when the cause is samples size.
+* Give the possibility to set the maximum combined size of the two
+samples for exact computation of the p-values in the two-samples
+test. In the original ks.test, p-values for samples whose sizes
+product is > 10,000 are approximated. In case approximation is used,
+ks.test.2 throws a warning. In ks.test a warning is always thrown when
+p-values are not computed exactly, **but** when the cause is samples
+size.
 
 # Examples
 ## With original ks.test:
@@ -96,6 +99,30 @@ alternative hypothesis: two-sided
 Note that in this example, at a significance threshold of 0.05, you would reject the
 null hypothesis when using the exact p-value, but not when using the
 approximated p-value.
+
+## Gene Set Enrichment Analysis (GSEA)
+
+ks.test.2 can be used for rank-based GSEA. Suppose you have a gene
+expression profiles P including 22000 genes sorted from the most
+upregulated to the most downregulated. Suppose you also have a gene
+set S containing 5 genes, and such genes are ranked 1000th, 21000th,
+21100th, 21200th and 22000th in P. The following code compute the GSEA
+of S against the profile P.
+
+```
+> S <- c(1000, 21500, 21800, 21900, 22000)
+> k <- ks.test.2(S, (1:22000)[-S], maxCombSize=10^10)
+> k$ES; k$p
+[1] -0.777404
+[1] 0.001097664
+```
+
+The set is significantly downregulated. In particular this is the GSEA
+method with parameter p=0. The p-value is exact (no permutations),
+although correlations are not taken into account. Works fine in
+practice and allows to compute thousands of GSEAs in seconds
+(Napolitano et al 2016, Bioinformatics).
+
 
 # Notes
 
