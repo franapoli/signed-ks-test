@@ -105,8 +105,8 @@ approximated p-value.
 ks.test.2 can be used for rank-based GSEA. Suppose you have a gene
 expression profiles P including 22000 genes sorted from the most
 upregulated to the most downregulated. Suppose you also have a gene
-set S containing 5 genes, and such genes are ranked 1000th, 21000th,
-21100th, 21200th and 22000th in P. The following code compute the GSEA
+set S containing 5 genes, and such genes are ranked 1000th, 21500th,
+21800th, 21900th and 22000th in P. The following code computes the GSEA
 of S against the profile P.
 
 ```
